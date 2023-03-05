@@ -4,7 +4,7 @@ A level editor for my Scratch game "Labirynth"
 
 # Requirements
 
-You will need Python 3.x to use this level editor.
+You will need Python 3.x with PILLOW Imaging Library installed to use this level editor. *(https://pypi.org/project/Pillow/) install link*
 
 # Usage
 
