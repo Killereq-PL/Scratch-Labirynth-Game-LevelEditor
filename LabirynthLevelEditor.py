@@ -1,8 +1,9 @@
 from tkinter import *
+from tkinter import messagebox
 from PIL import Image, ImageTk
 from tkinter import filedialog
+from tkinter.filedialog import asksaveasfile
 
-TKimages = ["TkWallImage", "TkEmptyImage", "TkLavaImage", "TkPlayerImage", "TkWinImage"]
 SavingImages = ["wall", "empty", "lava", "player", "win"]
 
 Saved = ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"]
@@ -10,6 +11,8 @@ Saved = ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall",
 file = None
 
 def browseFiles():
+    if ErrorLabelVariable.get() == "ERROR: Cannot have more than one player at the same time!":
+        ErrorLabelVariable.set("")
     global file
     global Saved
     filename = filedialog.askopenfilename(initialdir = "/",
@@ -25,12 +28,11 @@ def browseFiles():
         for row in range(8):
             i = col * 8 + row + 1  # calculate button number
             i -= 1
-            buttons[i].config(image=TkWallImage)
+            img = TKimages[SavingImages.index(Saved[i])]
+            buttons[i].config(image=img)
 
-
-def get_button(t):
+def get_button(t): # button press
     global ErrorLabelVariable
-    print(t)
     button_index = int(t) - 1
     x = buttons[button_index].cget("image")
     if x == "pyimage2":
@@ -55,14 +57,27 @@ def get_button(t):
     elif x == "pyimage6":
      buttons[button_index].config(image=TkWallImage)
      Saved[button_index] = "wall"
-    
-    print(x)
 
 def new_file():
+    if ErrorLabelVariable.get() == "ERROR: Cannot have more than one player at the same time!":
+        ErrorLabelVariable.set("")
     global Saved
     Saved = ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"]
     for x in buttons:
         x.config(image=TkWallImage)
+
+def save_file():
+    if Saved.count("player") > 1:
+        messagebox.showerror(title="Error detected", message="Error saving: Cannot have more than one player at the same time!")
+    else:
+        f = asksaveasfile(initialfile = 'CustomLevel.txt', 
+                          defaultextension=".txt",
+                          filetypes=[("Text Files","*.txt")])
+        f.mode = 'a'              
+        for y in range(len(Saved)):  
+            if y != 0:
+                f.write('\n')        
+            f.write(Saved[y])
 
 root = Tk()
 root.iconphoto(False, PhotoImage(file='Assets\\icon.png'))
@@ -77,7 +92,7 @@ menubar = Menu(root)
 filemenu = Menu(menubar, tearoff=0)
 filemenu.add_command(label="New", command=new_file)
 filemenu.add_command(label="Open", command=browseFiles)
-filemenu.add_command(label="Save")
+filemenu.add_command(label="Save", command=save_file)
 filemenu.add_separator()
 filemenu.add_command(label="Exit", command=root.quit)
 menubar.add_cascade(label="File", menu=filemenu)
@@ -101,6 +116,8 @@ TkPlayerImage = ImageTk.PhotoImage(PlayerImage)
 WinImage = Image.open("Assets/win.png").convert("RGBA")
 WinImage = WinImage.resize((42, 42), Image.Resampling.BILINEAR)
 TkWinImage = ImageTk.PhotoImage(WinImage)
+
+TKimages = [TkWallImage, TkEmptyImage, TkLavaImage, TkPlayerImage, TkWinImage]
 
 ErrorLabelVariable = StringVar()
 ErrorLabel = Label(root, textvariable=ErrorLabelVariable, bg="white").pack()
