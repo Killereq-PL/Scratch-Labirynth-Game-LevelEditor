@@ -10,10 +10,12 @@ You will need Python 3.x to use this level editor.
 
 1. In Scratch, Remix the game and in editor enable visibility of the 'Level1' List.
 
-2. Press right click on the list in the play area and press export.
+2. Press right click on the list in the play area and press Export.
 
 3. *Save the file in the folder, in which the level editor is downloaded (optional)*
 
 4. Launch the python program.
 
-5. Open the 
+5. Open the file, and start editing
+
+6. Once you're done save the file and import it by right clicking on the list in the scratch play area and selecting Import 
